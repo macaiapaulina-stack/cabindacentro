@@ -186,6 +186,12 @@
             <label for="regioes-mudancas">Regiões de Altas Mudanças</label>
         </div>
 
+        <div class="layer-control">
+            <input type="checkbox" id="imagem-raster">
+            <span class="color-indicator" style="background: #9b59b6;"></span>
+            <label for="imagem-raster">Imagem Raster/Satélite</label>
+        </div>
+
         <div class="info-box">
             💡 Clique nos elementos do mapa para mais informações
         </div>
@@ -405,6 +411,35 @@
             }
         });
 
+        // ========== IMAGEM RASTER (Configuração) ==========
+        
+        const imageBounds = [[-5.6, 12.0], [-5.0, 12.6]]; // Coordenadas de Cabinda
+        // Formato: [[lat_sul, lon_oeste], [lat_norte, lon_leste]]
+        
+        const rasterOverlay = L.imageOverlay('Sentinel_2_multitemporais_Cabinda.jpg', imageBounds, {
+            opacity: 0.7, // Transparência: 0.0 (invisível) a 1.0 (opaco)
+            attribution: 'Imagem Satélite Sentinel-2'
+        });
+        
+        layers.raster = rasterOverlay;
+        
+        // Controle de visibilidade da imagem raster
+        const rasterCheckbox = document.getElementById('imagem-raster');
+        if (rasterCheckbox) {
+            rasterCheckbox.addEventListener('change', function(e) {
+                if (layers.raster) {
+                    if (e.target.checked) {
+                        map.addLayer(layers.raster);
+                    } else {
+                        map.removeLayer(layers.raster);
+                    }
+                } else {
+                    alert('Imagem raster ainda não configurada. Configure as coordenadas no código.');
+                }
+            });
+        }
+        // ========== FIM IMAGEM RASTER ==========
+
         // Add scale control
         L.control.scale({
             position: 'bottomleft',
@@ -413,4 +448,4 @@
     </script>
 </body>
 </html>
-
+php -S localhost:8000php 
