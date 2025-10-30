@@ -192,6 +192,32 @@
             <label for="imagem-raster">Imagem Raster/Satélite</label>
         </div>
 
+        <div class="layer-control">
+            <input type="checkbox" id="rocha-geradora" checked>
+            <span class="color-indicator" style="background: #34495e;"></span>
+            <label for="rocha-geradora">Rocha Geradora + Profunda</label>
+        </div>
+        <div class="layer-control">
+            <input type="checkbox" id="rg-tr" checked>
+            <span class="color-indicator" style="background: #b6ca39;"></span>
+            <label for="rg-tr">RG TR</label>
+        </div>
+        <div class="layer-control">
+            <input type="checkbox" id="prospectos" checked>
+            <span class="color-indicator" style="background: #e84393;"></span>
+            <label for="prospectos">Prospectos</label>
+        </div>
+        <div class="layer-control">
+            <input type="checkbox" id="nivel-lucula" checked>
+            <span class="color-indicator" style="background: #8e6840;"></span>
+            <label for="nivel-lucula">Topo do Lucula</label>
+        </div>
+        <div class="layer-control">
+            <input type="checkbox" id="vias-migracao" checked>
+            <span class="color-indicator" style="background: #0984e3;"></span>
+            <label for="vias-migracao">Principais Vias de Migração</label>
+        </div>
+
         <div class="info-box">
             💡 Clique nos elementos do mapa para mais informações
         </div>
@@ -439,6 +465,94 @@
             });
         }
         // ========== FIM IMAGEM RASTER ==========
+
+        // Rocha Geradora Mais Profunda
+        fetch('rocha_geradora_mais_profunda.geojson')
+            .then(response => response.json())
+            .then(data => {
+                layers.rochaGeradora = L.geoJSON(data, {
+                    style: { color: '#34495e', weight: 2, fillOpacity: 0.2 },
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup('<b>Rocha Geradora & Profunda</b>');
+                    }
+                }).addTo(map);
+            });
+        // RG TR
+        fetch('rg_tr.geojson')
+            .then(response => response.json())
+            .then(data => {
+                layers.rgtr = L.geoJSON(data, {
+                    style: { color: '#b6ca39', weight: 2, fillOpacity: 0.16 },
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup('<b>RG TR</b>');
+                    }
+                }).addTo(map);
+            });
+        // Prospectos
+        fetch('prospectos.geojson')
+            .then(response => response.json())
+            .then(data => {
+                layers.prospectos = L.geoJSON(data, {
+                    style: { color: '#e84393', weight: 2, fillOpacity: 0.22 },
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup('<b>Prospecto</b>');
+                    }
+                }).addTo(map);
+            });
+        // Topo do Lucula
+        fetch('nivel_topo_do_lucula.geojson')
+            .then(response => response.json())
+            .then(data => {
+                layers.lucula = L.geoJSON(data, {
+                    style: { color: '#8e6840', weight: 2, fillOpacity: 0.17 },
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup('<b>Nível Topo do Lucula</b>');
+                    }
+                }).addTo(map);
+            });
+
+        // Principais Vias de Migração dos Hidrocarbonetos
+        fetch('principais_vias_de_migração_dos_hidrocarbonetos.geojson')
+            .then(response => response.json())
+            .then(data => {
+                layers.viasMigracao = L.geoJSON(data, {
+                    style: { color: '#0984e3', weight: 3, dashArray: '6,6' },
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup('<b>Via de Migração</b>');
+                    }
+                }).addTo(map);
+            });
+
+        document.getElementById('rocha-geradora').addEventListener('change', function(e) {
+            if (layers.rochaGeradora) {
+                if (e.target.checked) map.addLayer(layers.rochaGeradora);
+                else map.removeLayer(layers.rochaGeradora);
+            }
+        });
+        document.getElementById('rg-tr').addEventListener('change', function(e) {
+            if (layers.rgtr) {
+                if (e.target.checked) map.addLayer(layers.rgtr);
+                else map.removeLayer(layers.rgtr);
+            }
+        });
+        document.getElementById('prospectos').addEventListener('change', function(e) {
+            if (layers.prospectos) {
+                if (e.target.checked) map.addLayer(layers.prospectos);
+                else map.removeLayer(layers.prospectos);
+            }
+        });
+        document.getElementById('nivel-lucula').addEventListener('change', function(e) {
+            if (layers.lucula) {
+                if (e.target.checked) map.addLayer(layers.lucula);
+                else map.removeLayer(layers.lucula);
+            }
+        });
+        document.getElementById('vias-migracao').addEventListener('change', function(e) {
+            if (layers.viasMigracao) {
+                if (e.target.checked) map.addLayer(layers.viasMigracao);
+                else map.removeLayer(layers.viasMigracao);
+            }
+        });
 
         // Add scale control
         L.control.scale({
